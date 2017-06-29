@@ -10,3 +10,6 @@
 
 # Power switch for Raspberry Pi
 - http://www.raspberry-pi-geek.com/Archive/2013/01/Adding-an-On-Off-switch-to-your-Raspberry-Pi
+
+# Fan for Pi
+- https://hackernoon.com/how-to-control-a-fan-to-cool-the-cpu-of-your-raspberrypi-3313b6e7f92c
