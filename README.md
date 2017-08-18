@@ -26,8 +26,8 @@
 
 
 ## OS Setup
-* Follow the directions here to install Raspbian OS onto the SD card
-  * https://www.raspberrypi.org/documentation/installation/
+* Follow the directions here to install Adafruit's modified Raspbian OS onto the SD card
+  * https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/easy-install
 * Follow these instructions for setting up WiFi on UVA network
   * http://scholarslab.org/makerspace/raspberry-pi-on-uva-wifi-network/
 * Follow these instructions for configuring to use the PiTFT display
