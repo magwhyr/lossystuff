@@ -23,6 +23,8 @@
   * https://www.amazon.com/Samsung-Class-Adapter-MB-MP32DA-AM/dp/B00IVPU786/ref=sr_1_2?s=pc&ie=UTF8&qid=1491579374&sr=1-2&keywords=micro+sd+card&refinements=p_n_feature_two_browse-bin%3A6518304011
 * White LED Backlight Module - Medium 23mm x 75mm
   * https://www.adafruit.com/product/1622
+* Tactile Button switch (6mm)
+  * https://www.adafruit.com/product/367
 
 
 ## OS Setup
