@@ -50,8 +50,8 @@ def readadc(adcnum, clockpin, mosipin, misopin, cspin):
 # SPI port on the ADC to the Cobbler
 SPICLK = 18
 SPIMISO = 21
-SPIMOSI = 24 * change this!
-SPICS = 25 * change this!
+SPIMOSI = 5
+SPICS = 6
 
 # set up the SPI interface pins
 GPIO.setup(SPIMOSI, GPIO.OUT)
