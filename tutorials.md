@@ -5,6 +5,8 @@
   - https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/
   - http://www.knight-of-pi.org/reading-an-analog-potentiometer-with-the-ad-converter-mcp3008-and-spi/
   - https://www.raspberrypi.org/forums/viewtopic.php?f=9&t=5583
+- Control OMX with python
+  - https://github.com/jbaiter/pyomxplayer
 
 # Playing video on the PiTFT screen
 - https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/playing-videos
