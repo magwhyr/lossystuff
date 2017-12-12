@@ -38,6 +38,7 @@
 * ADS1115 16-Bit ADC - 4 Channel with Programmable Gain Amplifier
   * https://www.adafruit.com/product/1085
 
+
 # Step 2: Install the OS on SD card
 ## OS Setup
 * Follow the directions here to install Adafruit's modified Raspbian OS onto the SD card
@@ -46,6 +47,7 @@
   * http://scholarslab.org/makerspace/raspberry-pi-on-uva-wifi-network/
 * Follow these instructions for configuring to use the PiTFT display
   * https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/overview
+
 
 # Step 3: Power
 
@@ -68,4 +70,8 @@ switch, also connected to the PowerBoost, cuts power to the PowerBoost and Pi.
 * To add the on/off switch to the PowerBoost, follow this tutorial
   * https://learn.adafruit.com/adafruit-powerboost-500-plus-charger/on-slash-off-switch
   * Basically, solder the two wire switch to the GND and EN holes
+  * The switch (https://www.adafruit.com/product/916) has a built in LED, so wiring is as such: 
+    * + to 5v on the PowerBoost, and - to the Gnd on PowerBoost. C1 (common) on switch to Gnd on PowerBoost. NO1 (Noncommon Open) on switch to En on PowerBoost.
+
+* The Fan is also connected to the PowerBoost. The same Gnd and 5v as the switch so that the fan is on when the system is on and off when the system is off.
 
