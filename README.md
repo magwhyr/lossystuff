@@ -59,6 +59,22 @@
 * Follow these instructions for configuring to use the PiTFT display
   * https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/overview
 
+## OS Setup 2
+* Begin with the PiTFT unplugged
+* Follow instructions for installing the latest Raspbian OS.
+  * https://www.raspberrypi.org/documentation/installation/
+* Follow these instructions for setting up WiFi on UVA network
+  * http://scholarslab.org/makerspace/raspberry-pi-on-uva-wifi-network/
+* Follow instructions for installing fbcp
+  * https://learn.adafruit.com/running-opengl-based-games-and-emulators-on-adafruit-pitft-displays/pitft-setup
+  * For the options, select:
+    1. Select Project: (option 4) Configure options manually
+    2. Select display type: (option 3) PiTFT / PiTFT Plus 2.8" capacitive
+    3. HDMI Rotation: (option 1) Normal
+    4. TFT (MADCTL) rotation: (option 4) 270
+  * Add this to the /boot/config.txt file
+    * `dtoverlay=pitft28-capacitive,rotate=270,touch-swapxy,touch-invx,speed=32000000,fps=20`
+
 
 # Step 3: Power
 
