@@ -74,6 +74,8 @@
     4. TFT (MADCTL) rotation: (option 4) 270
   * Add this to the /boot/config.txt file
     * `dtoverlay=pitft28-capacitive,rotate=270,touch-swapxy,touch-invx,speed=32000000,fps=20`
+    * http://www.0xf8.org/2016/01/complete-rotation-support-for-the-adafruit-pitft-2-8-capacitive-touchscreen-display/
+    * http://www.runeaudio.com/forum/adafruit-pitft-2-8-capacitive-screen-with-buttons-solved-t3964.html
 
 
 # Step 3: Power
@@ -89,13 +91,9 @@ switch, also connected to the PowerBoost, cuts power to the PowerBoost and Pi.
   Raspberry Pi. A button allows for safe shutdown of the Raspberry Pi.
 * The PiTFT comes with four buttons on the side, one is wired to provide the
   safe shutdown. To free this button and use our own, follow this tutorial
-  * https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/extras#tactile-switch-as-power-button
-  * Basically, open the file at `/etc/modprobe.d/adafruit.conf` and edit the
-    line in there. Change the `gpio_pin` to the desired GPIO pin. It should
-    look like this: 
-    * `options rpi_power_switch gpio_pin=23 mode=0`
-  * Since this is a switch button, rather than push button, each time the switch (button) is pushed it triggers either shutdown or reboot. If the Pi is shutdown, the switch will trigger a reboot, if the Pi is on, the switch will trigger a shutdown, regardless of the state of the switch (button depressed, or button out).
-  * 12/13/17 may not be working. tried with this too: https://github.com/scruss/shutdown_button.git But not sure which is actually working.
+  * Use this script. https://github.com/scruss/shutdown_button.git 
+  * The button should be physically plugged into BCM/GPIO 27.
+  * To run the shutdown script, the button must go from an unpressed to pressed state.
 * To add the on/off switch to the PowerBoost, follow this tutorial
   * https://learn.adafruit.com/adafruit-powerboost-500-plus-charger/on-slash-off-switch
   * Basically, solder the two wire switch to the GND and EN holes
