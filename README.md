@@ -6,7 +6,7 @@
   * https://www.adafruit.com/product/3055
 * potentiometer
   * https://www.sparkfun.com/products/9940
-* volume knob
+* volume knob (make sure it goes to 11)
   * https://www.sparkfun.com/products/11951
 * ~~toggle switch~~
   * https://www.sparkfun.com/products/9276#reviews
@@ -35,6 +35,7 @@
 * ~~HDMI extender~~
   * https://www.amazon.com/gp/product/B001K38Z2G/
   * Not providing a port for HDMI after all. It doesn't work anyways with the PiTFT.
+    * but, it does now when using the fbcp, but still not providing an HDMI port anyway.
 * Mini Fan
   * https://www.adafruit.com/product/3368
 * ADS1115 16-Bit ADC - 4 Channel with Programmable Gain Amplifier
@@ -72,11 +73,41 @@
     2. Select display type: (option 3) PiTFT / PiTFT Plus 2.8" capacitive
     3. HDMI Rotation: (option 1) Normal
     4. TFT (MADCTL) rotation: (option 4) 270
-  * Add this to the /boot/config.txt file
-    * `dtoverlay=pitft28-capacitive,rotate=270,touch-swapxy,touch-invx,speed=32000000,fps=20`
+  * Add this to the /boot/config.txt file to get the orientation for the touch to be correct.
+    * `dtoverlay=pitft28-capacitive,rotate=270,touch-swapxy,touch-invy,speed=32000000,fps=20`
+      * NOTE: you may need to have `touch-invx` instead of `touch-invy` if the mouse cursor is not behaving in the right direction.
     * http://www.0xf8.org/2016/01/complete-rotation-support-for-the-adafruit-pitft-2-8-capacitive-touchscreen-display/
     * http://www.runeaudio.com/forum/adafruit-pitft-2-8-capacitive-screen-with-buttons-solved-t3964.html
+    * 
+      ```
+      # Enable audio (loads snd_bcm2835)
+      dtparam=audio=on
 
+      # PiTFT 2.8" settings
+      dtoverlay=pitft28-capacitive,rotate=270,touch-swapxy,touch-invy,speed=32000000,fps=20
+      display_rotate=0
+
+      # Great resolution for just the PiTFT (too low for monitor)
+      #hdmi_group=2
+      #hdmi_mode=87
+      # Great screen resolution for having the monitor attached
+      hdmi_group=1
+      hdmi_mode=34
+
+      hdmi_cvt=320 240 60 1 0 0 0
+      start_x=0
+      ```
+    * Change all occurances of hdmi_group to 2 and hdmi_mod to 87
+
+
+### Using a monitor instead
+To use a monitor instead of the PiTFT, you'll need to edit the `/boot/config.txt` file.
+- Comment out the lines you add in from above, all of the lines that begin with "dtoverlay" and "display_rotate" and "hdmi_cvt"
+- Make sure the monitor is plugged in via HDMI
+- You can follow the steps here, under "Which values are valid for my monitor?", to determine which mode to use.
+  - https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
+  - Edit the "hdmi_group" and "hdmi_mode" lines based on the results of the steps outlined above.
+- Leave everything uncommented and both work at the same time.
 
 # Step 3: Power
 
@@ -104,4 +135,68 @@ switch, also connected to the PowerBoost, cuts power to the PowerBoost and Pi.
 
 
 # Step 4: Volume Control (it goes to 11)
+- Add this line to `/boot/config.txt` to remove hissing from the 3.5mm audio output
+  - `audio_pwm_mode=2`
+- Analog to digital conversion is handled with the ADS1115 16-Bit ADC - 4 Channel with Programmable Gain Amplifier (https://www.adafruit.com/product/1085) The amplifier sits between the Pi and a potentiometer (https://www.sparkfun.com/products/9940) with a volume knob (make sure it goes to 11) (https://www.sparkfun.com/products/11951).
+  - The ADC is connected to the Raspberry Pi 3V and Ground, and SCL to SCL, and SDA to SDA.
+  - The potentiometer is connected to the Raspberry Pi 3V and Ground, and the middle connection to A0 on the ADC.
+- Get the Python libraries for connecting with ADC
+  - https://github.com/adafruit/Adafruit_Python_ADS1x15
+  -
+    ```
+    sudo apt-get install git build-essential python-dev
+    cd ~
+    git clone https://github.com/adafruit/Adafruit_Python_ADS1x15.git
+    cd Adafruit_Python_ADS1x15
+    sudo python setup.py install
+    ```
+- And the python library for controlling the volume
+  - https://stackoverflow.com/questions/41592431/changing-volume-in-python-program-on-raspbery-pi
+  -
+  ```
+  sudo apt-get install python-alsaaudio
+  ```
+- Make a file at ~/volume-control/volume-control.py to control the volume
+  - 
+    ```
+      import time
+      import alsaaudio
+      import Adafruit_ADS1x15
 
+      adc = Adafruit_ADS1x15.ADS1115()
+      m = alsaaudio.Mixer('PCM')
+
+      current_volume = m.getvolume()
+
+      # Choose a gain of 1 for reading voltages from 0 to 4.09V.
+      # Or pick a different gain to change the range of voltages that are read:
+      #  - 2/3 = +/-6.144V
+      #  -   1 = +/-4.096V
+      #  -   2 = +/-2.048V
+      #  -   4 = +/-1.024V
+      #  -   8 = +/-0.512V
+      #  -  16 = +/-0.256V
+      # See table 3 in the ADS1015/ADS1115 datasheet for more info on gain.
+      GAIN = 1
+
+      def maprange(VOL, POT, v):
+          (VOL1, VOL2), (POT1, POT2) = VOL, POT
+          return  POT1 + ((v - VOL1) * (POT2 - POT1) / (VOL2 - VOL1))
+
+      while True:
+          value = adc.read_adc(0, gain=GAIN)
+          volume = maprange((0,26354), (0,100), value)
+          if volume < 0:
+              volume = 0
+          m.setvolume(volume)
+    ```
+
+- Add this line to `~/.config/lxsession/LXDE-pi/autostart` to have the python script run on startup.
+  - `/usr/bin/python /home/pi/volume-control/volume-control.py`
+
+# Step 5: Get Processing to run the script at boot
+- Make sure the resolution on the PiTFT is max at 320x240.
+- Add this line to `~/.config/lxsession/LXDE-pi/autostart`
+  - `/home/pi/processing-3.3.6/processing-java --sketch=/home/pi/sketchbook/modernistPi --run`
+
+# Step 6: Hardware Assembly
